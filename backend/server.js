@@ -9,7 +9,7 @@ const { InMemoryLRUCache } = require('apollo-server-caching');
 const cookieParser = require('cookie-parser');
 
 const app = express();
-const mainPort = 3000;
+const mainPort = 4000;
 
 const secretKey = 'your-secret-key'; // Токен секрет
 
@@ -19,7 +19,7 @@ app.use(cookieParser()); // Для работы с cookies
 
 // Настройка CORS с учетом отправки cookies
 app.use(cors({
-  origin: 'http://localhost:5173', // Разрешаем только фронтенду на этом порту
+  origin: 'http://localhost:3000', // Разрешаем только фронтенду на этом порту
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Разрешённые методы
   allowedHeaders: ['Content-Type', 'Authorization'], // Разрешённые заголовки
   credentials: true, // Разрешаем отправку cookies
