@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "4001:4001"
+    volumes:
+      - ./auth-service:/app
+    restart: unless-stopped
+
+  records-service:
+    build: ./records-service
+    ports:
+      - "4002:4002"
+    volumes:
+      - ./records-service:/app
+    restart: unless-stopped
+
+  ensembles-service:
+    build: ./ensembles-service
+    ports:
+      - "4003:4003"
+    volumes:
+      - ./ensembles-service:/app
+    restart: unless-stopped
+
+  compositions-service:
+    build: ./compositions-service
+    ports:
+      - "4004:4004"
+    volumes:
+      - ./compositions-service:/app
+    restart: unless-stopped
+
+  top-service:
+    build: ./top-service
+    ports:
+      - "4005:4005"
+    volumes:
+      - ./top-service:/app
+    restart: unless-stopped
+
+  admin-service:
+    build: ./admin-service
+    ports:
+      - "4006:4006"
+    volumes:
+      - ./admin-service:/app
+    restart: unless-stopped

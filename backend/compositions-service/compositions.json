@@ -1,0 +1,17 @@
+[
+    {
+      "id": 1,
+      "title": "So What",
+      "composer": "Miles Davis",
+      "genre": "Jazz",  
+      "year": 1959
+    },
+    {
+      "id": 2,
+      "title": "Giant Steps",
+      "composer": "John Coltrane",
+      "genre": "Jazz",  
+      "year": 1960
+    }
+  ]
+  

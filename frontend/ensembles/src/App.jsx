@@ -9,5 +9,6 @@ export default function EnsemblesApp() {
         <Route path="/" element={<EnsembleListPage />} />
         <Route path="/ensembles/:id" element={<EnsembleDetailPage />} />
       </Routes>
+   
   );
 }

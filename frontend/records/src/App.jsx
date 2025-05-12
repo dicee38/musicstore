@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import RecordListPage from './pages/RecordListPage';
 import RecordDetailPage from './pages/RecordDetailPage';
 

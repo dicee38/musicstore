@@ -1,0 +1,77 @@
+version: '3.9'
+
+services:
+  shell-frontend:
+    build: ./shell
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./shell:/app
+    working_dir: /app
+    command: npm run dev
+    restart: unless-stopped
+
+  auth-frontend:
+    build: ./auth
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./auth:/app
+    working_dir: /app
+    command: npm run dev
+    restart: unless-stopped
+
+  records-frontend:
+    build: ./records
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./records:/app
+    working_dir: /app
+    command: npm run dev
+    restart: unless-stopped
+
+  ensembles-frontend:
+    build: ./ensembles
+    ports:
+      - "3003:3003"
+    volumes:
+      - ./ensembles:/app
+    working_dir: /app
+    command: npm run dev
+    restart: unless-stopped
+
+  compositions-frontend:
+    build: ./compositions
+    ports:
+      - "3004:3004"
+    volumes:
+      - ./compositions:/app
+    working_dir: /app
+    command: npm run dev
+    restart: unless-stopped
+
+  top-frontend:
+    build: ./top
+    ports:
+      - "3005:3005"
+    volumes:
+      - ./top:/app
+    working_dir: /app
+    command: npm run dev
+    restart: unless-stopped
+    
+  admin-frontend:
+    build: ./admin
+    ports:
+      - "3006:3006"
+    volumes:
+      - ./admin:/app
+    working_dir: /app
+    command: npm run dev
+    restart: unless-stopped
+
+
+
+
+

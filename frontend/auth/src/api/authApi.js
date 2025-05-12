@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export async function loginApi(email, password) {
   try {
-    const res = await axios.post('http://localhost:4000/api/login', { email, password });
+    const res = await axios.post('http://localhost:4001/api/login', { email, password });
     localStorage.setItem('token', res.data.token);
     return res.data;
   } catch (err) {
@@ -13,7 +13,7 @@ export async function loginApi(email, password) {
 
 export async function registerApi(email, password) {
   try {
-    await axios.post('http://localhost:4000/api/register', { email, password });
+    await axios.post('http://localhost:4001/api/register', { email, password });
   } catch (err) {
     alert('Registration failed');
   }

@@ -11,7 +11,20 @@ export default defineConfig({
       exposes: {
         './RecordsApp': './src/App.jsx'
       },
-      shared: ['react', 'react-dom', 'react-router-dom']
+      shared: {
+        react: {
+          singleton: true,
+          requiredVersion: '^18.0.0',
+        },
+        'react-dom': {
+          singleton: true,
+          requiredVersion: '^18.0.0',
+        },
+        'react-router-dom': {
+          singleton: true,
+          requiredVersion: '^6.0.0',
+        },
+      }
     })
   ],
   server: {

@@ -1,10 +1,10 @@
 import React, { Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'; 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Header from './components/Header';
 import Navigation from './components/Navigation';
 import { Box, CircularProgress, Container } from '@mui/material';
-import HomePage from './pages/HomePage'; 
+import HomePage from './pages/Homepage'; 
 
 // Ленивая загрузка микрофронтендов
 const AuthApp = React.lazy(() => import('auth/AuthApp'));
@@ -41,6 +41,7 @@ const theme = createTheme({
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
+      
       <div>
         <Header />
         <Navigation />
@@ -60,6 +61,7 @@ export default function App() {
           }
         >
           <Container sx={{ marginTop: 2 }}>
+            
             <Routes>
               <Route path="/" element={<HomePage />} /> {/* Главная страница */}
               <Route path="/auth/*" element={<AuthApp />} />

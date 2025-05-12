@@ -1,0 +1,13 @@
+[
+    {
+      "id": "1",
+      "name": "Modern Jazz Quartet",
+      "members": ["John Lewis", "Milt Jackson", "Percy Heath", "Connie Kay"]
+    },
+    {
+      "id": "2",
+      "name": "Weather Report",
+      "members": ["Joe Zawinul", "Wayne Shorter", "Jaco Pastorius"]
+    }
+  ]
+  
