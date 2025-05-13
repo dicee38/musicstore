@@ -19,6 +19,7 @@ app.get('/api/records', async (req, res) => {
     });
     res.json(records);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Ошибка при получении записей' });
   }
 });
@@ -35,6 +36,7 @@ app.get('/api/records/:id', async (req, res) => {
     if (!record) return res.sendStatus(404);
     res.json(record);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Ошибка при получении записи' });
   }
 });
@@ -43,7 +45,7 @@ app.get('/api/records/:id', async (req, res) => {
  * Создать запись
  */
 app.post('/api/records', async (req, res) => {
-  const { title, year, description, sales = 0, ensembleId = null } = req.body;
+  const { title, year, description, sales = 0, ensembleId = null, price } = req.body;
   try {
     const newRecord = await prisma.record.create({
       data: {
@@ -52,6 +54,7 @@ app.post('/api/records', async (req, res) => {
         description,
         sales,
         ensembleId,
+        price,
       },
     });
     res.status(201).json(newRecord);
@@ -72,6 +75,7 @@ app.put('/api/records/:id', async (req, res) => {
     });
     res.json(updated);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Ошибка при обновлении записи' });
   }
 });
@@ -86,6 +90,7 @@ app.delete('/api/records/:id', async (req, res) => {
     });
     res.sendStatus(204);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Ошибка при удалении записи' });
   }
 });

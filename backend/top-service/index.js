@@ -25,7 +25,7 @@ app.get('/api/top', async (req, res) => {
 });
 
 /**
- * (Опционально) Получить топовые категории (ручные)
+ * Получить все категории топов
  */
 app.get('/api/top/categories', async (req, res) => {
   try {
@@ -37,7 +37,22 @@ app.get('/api/top/categories', async (req, res) => {
 });
 
 /**
- * (Опционально) Добавить новую категорию топа
+ * Получить конкретную категорию топа
+ */
+app.get('/api/top/categories/:id', async (req, res) => {
+  try {
+    const top = await prisma.top.findUnique({
+      where: { id: parseInt(req.params.id) },
+    });
+    if (!top) return res.sendStatus(404);
+    res.json(top);
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка при получении категории' });
+  }
+});
+
+/**
+ * Добавить новую категорию топа
  */
 app.post('/api/top/categories', async (req, res) => {
   const { category, items } = req.body;
@@ -48,6 +63,36 @@ app.post('/api/top/categories', async (req, res) => {
     res.status(201).json(newTop);
   } catch (err) {
     res.status(500).json({ error: 'Ошибка при создании категории' });
+  }
+});
+
+/**
+ * Обновить категорию топа
+ */
+app.put('/api/top/categories/:id', async (req, res) => {
+  const { category, items } = req.body;
+  try {
+    const updated = await prisma.top.update({
+      where: { id: parseInt(req.params.id) },
+      data: { category, items },
+    });
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка при обновлении категории' });
+  }
+});
+
+/**
+ * Удалить категорию топа
+ */
+app.delete('/api/top/categories/:id', async (req, res) => {
+  try {
+    await prisma.top.delete({
+      where: { id: parseInt(req.params.id) },
+    });
+    res.sendStatus(204);
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка при удалении категории' });
   }
 });
 
