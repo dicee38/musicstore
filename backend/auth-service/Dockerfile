@@ -1,6 +1,12 @@
 FROM node:18
+
 WORKDIR /app
-COPY . .
+
+COPY package*.json ./
 RUN npm install
-EXPOSE 4001  
-CMD ["node", "index.js"]
+
+COPY . .
+
+EXPOSE 4001
+
+CMD ["sh", "-c", "npx prisma generate && node index.js"]

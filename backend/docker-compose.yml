@@ -1,13 +1,29 @@
 version: '3.9'
 
 services:
+  postgres:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: unical
+      POSTGRES_PASSWORD: unical
+      POSTGRES_DB: musicstore
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
   auth-service:
     build: ./auth-service
     ports:
       - "4001:4001"
     volumes:
       - ./auth-service:/app
-    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://unical:unical@postgres:5432/musicstore?schema=public
+    depends_on:
+      - postgres
+    command: sh -c "npx prisma generate && node index.js"
 
   records-service:
     build: ./records-service
@@ -15,7 +31,11 @@ services:
       - "4002:4002"
     volumes:
       - ./records-service:/app
-    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://unical:unical@postgres:5432/musicstore?schema=public
+    depends_on:
+      - postgres
+    command: sh -c "npx prisma generate && node index.js"
 
   ensembles-service:
     build: ./ensembles-service
@@ -23,7 +43,11 @@ services:
       - "4003:4003"
     volumes:
       - ./ensembles-service:/app
-    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://unical:unical@postgres:5432/musicstore?schema=public
+    depends_on:
+      - postgres
+    command: sh -c "npx prisma generate && node index.js"
 
   compositions-service:
     build: ./compositions-service
@@ -31,7 +55,11 @@ services:
       - "4004:4004"
     volumes:
       - ./compositions-service:/app
-    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://unical:unical@postgres:5432/musicstore?schema=public
+    depends_on:
+      - postgres
+    command: sh -c "npx prisma generate && node index.js"
 
   top-service:
     build: ./top-service
@@ -39,7 +67,11 @@ services:
       - "4005:4005"
     volumes:
       - ./top-service:/app
-    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://unical:unical@postgres:5432/musicstore?schema=public
+    depends_on:
+      - postgres
+    command: sh -c "npx prisma generate && node index.js"
 
   admin-service:
     build: ./admin-service
@@ -47,4 +79,10 @@ services:
       - "4006:4006"
     volumes:
       - ./admin-service:/app
-    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://unical:unical@postgres:5432/musicstore?schema=public
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:

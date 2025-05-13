@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  password String
+  role     Role    @default(USER)
+}
+
+model Record {
+  id          Int          @id @default(autoincrement())
+  title       String
+  year        Int
+  description String?
+  sales       Int          @default(0)
+  ensemble    Ensemble?    @relation(fields: [ensembleId], references: [id])
+  ensembleId  Int?
+
+  compositions Composition[] @relation("RecordCompositions")
+}
+
+model Ensemble {
+  id           Int           @id @default(autoincrement())
+  name         String
+  musicians    Musician[]
+  records      Record[]
+  compositions Composition[] @relation("EnsembleCompositions")
+}
+
+model Composition {
+  id          Int       @id @default(autoincrement())
+  title       String
+  composer    String
+  description String?
+
+  ensembles   Ensemble[] @relation("EnsembleCompositions")
+  records     Record[]   @relation("RecordCompositions")
+}
+
+model Musician {
+  id         Int      @id @default(autoincrement())
+  name       String
+  instrument String
+  ensemble   Ensemble @relation(fields: [ensembleId], references: [id])
+  ensembleId Int
+}
+
+model Company {
+  id          Int    @id @default(autoincrement())
+  name        String
+  country     String
+  foundedYear Int
+}
+
+model Top {
+  id       Int    @id @default(autoincrement())
+  category String
+  items    String[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}

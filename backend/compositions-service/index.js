@@ -1,29 +1,89 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
-const app = express();
+const { PrismaClient } = require('@prisma/client');
 
+const app = express();
+const prisma = new PrismaClient();
 const PORT = 4004;
-const FILE = './compositions.json';
 
 app.use(cors());
 app.use(express.json());
 
-const readData = () => JSON.parse(fs.readFileSync(FILE, 'utf8') || '[]');
-const writeData = (data) => fs.writeFileSync(FILE, JSON.stringify(data, null, 2));
-
-app.get('/api/compositions', (req, res) => res.json(readData()));
-app.get('/api/compositions/:id', (req, res) => {
-  const data = readData();
-  const found = data.find(i => i.id === req.params.id);
-  found ? res.json(found) : res.sendStatus(404);
-});
-app.post('/api/compositions', (req, res) => {
-  const data = readData();
-  const newItem = { id: Date.now().toString(), ...req.body };
-  data.push(newItem);
-  writeData(data);
-  res.status(201).json(newItem);
+/**
+ * Получить все композиции
+ */
+app.get('/api/compositions', async (req, res) => {
+  try {
+    const compositions = await prisma.composition.findMany({
+      include: { ensembles: true, records: true },
+    });
+    res.json(compositions);
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка при получении композиций' });
+  }
 });
 
-app.listen(PORT, () => console.log(`✅ Compositions service running on http://localhost:${PORT}`));
+/**
+ * Получить одну композицию
+ */
+app.get('/api/compositions/:id', async (req, res) => {
+  try {
+    const composition = await prisma.composition.findUnique({
+      where: { id: parseInt(req.params.id) },
+      include: { ensembles: true, records: true },
+    });
+    if (!composition) return res.sendStatus(404);
+    res.json(composition);
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка при получении композиции' });
+  }
+});
+
+/**
+ * Создать композицию
+ */
+app.post('/api/compositions', async (req, res) => {
+  const { title, composer, description } = req.body;
+  try {
+    const newComposition = await prisma.composition.create({
+      data: { title, composer, description },
+    });
+    res.status(201).json(newComposition);
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка при создании композиции' });
+  }
+});
+
+/**
+ * Обновить композицию
+ */
+app.put('/api/compositions/:id', async (req, res) => {
+  const { title, composer, description } = req.body;
+  try {
+    const updated = await prisma.composition.update({
+      where: { id: parseInt(req.params.id) },
+      data: { title, composer, description },
+    });
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка при обновлении композиции' });
+  }
+});
+
+/**
+ * Удалить композицию
+ */
+app.delete('/api/compositions/:id', async (req, res) => {
+  try {
+    await prisma.composition.delete({
+      where: { id: parseInt(req.params.id) },
+    });
+    res.sendStatus(204);
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка при удалении композиции' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`✅ Compositions service running on http://localhost:${PORT}`);
+});

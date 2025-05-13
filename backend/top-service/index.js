@@ -1,19 +1,56 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
-const app = express();
+const { PrismaClient } = require('@prisma/client');
 
+const app = express();
+const prisma = new PrismaClient();
 const PORT = 4005;
-const FILE = './top.json';
 
 app.use(cors());
 app.use(express.json());
 
-const readData = () => JSON.parse(fs.readFileSync(FILE, 'utf8') || '[]');
-
-app.get('/api/top', (req, res) => {
-  const top = readData().sort((a, b) => b.sales - a.sales).slice(0, 10);
-  res.json(top);
+/**
+ * Получить топ 10 записей по продажам
+ */
+app.get('/api/top', async (req, res) => {
+  try {
+    const topRecords = await prisma.record.findMany({
+      orderBy: { sales: 'desc' },
+      take: 10,
+    });
+    res.json(topRecords);
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка при получении топа' });
+  }
 });
 
-app.listen(PORT, () => console.log(`✅ Top service running on http://localhost:${PORT}`));
+/**
+ * (Опционально) Получить топовые категории (ручные)
+ */
+app.get('/api/top/categories', async (req, res) => {
+  try {
+    const categories = await prisma.top.findMany();
+    res.json(categories);
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка при получении категорий' });
+  }
+});
+
+/**
+ * (Опционально) Добавить новую категорию топа
+ */
+app.post('/api/top/categories', async (req, res) => {
+  const { category, items } = req.body;
+  try {
+    const newTop = await prisma.top.create({
+      data: { category, items },
+    });
+    res.status(201).json(newTop);
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка при создании категории' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`✅ Top service running on http://localhost:${PORT}`);
+});

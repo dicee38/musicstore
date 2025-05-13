@@ -1,30 +1,95 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
-const app = express();
+const { PrismaClient } = require('@prisma/client');
 
+const app = express();
+const prisma = new PrismaClient();
 const PORT = 4002;
-const FILE = './records.json';
 
 app.use(cors());
 app.use(express.json());
 
-const readData = () => JSON.parse(fs.readFileSync(FILE, 'utf8'));
-const writeData = (data) => fs.writeFileSync(FILE, JSON.stringify(data, null, 2));
-
-app.get('/api/records', (req, res) => res.json(readData()));
-app.get('/api/records/:id', (req, res) => {
-  const records = readData();
-  const record = records.find(r => r.id === req.params.id);
-  record ? res.json(record) : res.sendStatus(404);
+/**
+ * Получить все записи
+ */
+app.get('/api/records', async (req, res) => {
+  try {
+    const records = await prisma.record.findMany({
+      include: { ensemble: true },
+    });
+    res.json(records);
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка при получении записей' });
+  }
 });
 
-app.post('/api/records', (req, res) => {
-  const records = readData();
-  const newRecord = { id: Date.now().toString(), ...req.body };
-  records.push(newRecord);
-  writeData(records);
-  res.status(201).json(newRecord);
+/**
+ * Получить запись по id
+ */
+app.get('/api/records/:id', async (req, res) => {
+  try {
+    const record = await prisma.record.findUnique({
+      where: { id: parseInt(req.params.id) },
+      include: { ensemble: true },
+    });
+    if (!record) return res.sendStatus(404);
+    res.json(record);
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка при получении записи' });
+  }
 });
 
-app.listen(PORT, () => console.log(`Records service on http://localhost:${PORT}`));
+/**
+ * Создать запись
+ */
+app.post('/api/records', async (req, res) => {
+  const { title, year, description, sales = 0, ensembleId = null } = req.body;
+  try {
+    const newRecord = await prisma.record.create({
+      data: {
+        title,
+        year,
+        description,
+        sales,
+        ensembleId,
+      },
+    });
+    res.status(201).json(newRecord);
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка при создании записи' });
+  }
+});
+
+/**
+ * Обновить запись
+ */
+app.put('/api/records/:id', async (req, res) => {
+  const { title, year, description, sales, ensembleId } = req.body;
+  try {
+    const updated = await prisma.record.update({
+      where: { id: parseInt(req.params.id) },
+      data: { title, year, description, sales, ensembleId },
+    });
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка при обновлении записи' });
+  }
+});
+
+/**
+ * Удалить запись
+ */
+app.delete('/api/records/:id', async (req, res) => {
+  try {
+    await prisma.record.delete({
+      where: { id: parseInt(req.params.id) },
+    });
+    res.sendStatus(204);
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка при удалении записи' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`✅ Records service running on http://localhost:${PORT}`);
+});
