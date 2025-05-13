@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview --host --port 3002"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -19,8 +19,7 @@
     "react-dom": "^18.2.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.5.3",
-    "redux": "^5.0.1",
-    "rollup": "^4.40.2"
+    "redux": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

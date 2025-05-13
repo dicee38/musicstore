@@ -4,7 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Header from './components/Header';
 import Navigation from './components/Navigation';
 import { Box, CircularProgress, Container } from '@mui/material';
-import HomePage from './pages/Homepage'; 
+import HomePage from './pages/Homepage.jsx'; 
 
 // Ленивая загрузка микрофронтендов
 const AuthApp = React.lazy(() => import('auth/AuthApp'));

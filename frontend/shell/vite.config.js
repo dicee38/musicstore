@@ -20,6 +20,15 @@ export default defineConfig({
   ],
   server: {
     port: 3000
+  },
+  preview: {
+    port: 3000,
+  },
+  build: {
+    target: 'esnext', // Устанавливаем target на esnext
+    modulePreload: false,
+    cssCodeSplit: false,
+    minify: false
   }
 });
   

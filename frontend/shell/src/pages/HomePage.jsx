@@ -11,60 +11,66 @@ import {
   Container,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { useSpring, animated } from 'react-spring';
+import { keyframes } from '@emotion/react'; // для анимации
 
-const Section = ({ children, id, bg = 'white' }) => {
-  const props = useSpring({
-    opacity: 1,
-    from: { opacity: 0 },
-    delay: 300 * id,
-    config: { tension: 200, friction: 20 },
-  });
+// 🔧 Ключевая анимация fade-in
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
 
-  return (
-    <Box sx={{ backgroundColor: bg, py: 8 }}>
-      <animated.div style={props}>{children}</animated.div>
-    </Box>
-  );
-};
+// 🔧 Анимированный Section без react-spring
+const Section = ({ children, id, bg = 'white' }) => (
+  <Box
+    sx={{
+      backgroundColor: bg,
+      py: 8,
+      animation: `${fadeIn} 0.6s ease ${id * 0.3}s forwards`,
+      opacity: 0,
+    }}
+  >
+    {children}
+  </Box>
+);
+
+// 🔧 Визуальный блок для изображения
+const renderImageBlock = (src, alt) => (
+  <Paper
+    sx={{
+      height: { xs: 250, sm: 300, md: 400 },
+      overflow: 'hidden',
+      borderRadius: 3,
+      position: 'relative',
+    }}
+    elevation={4}
+  >
+    <img
+      src={src}
+      alt={alt}
+      style={{
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        transition: 'transform 0.5s ease',
+      }}
+      onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+      onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+      onError={(e) => {
+        e.currentTarget.style.display = 'none';
+      }}
+    />
+  </Paper>
+);
 
 export default function HomePage() {
-  const renderImageBlock = (src, alt) => (
-    <Paper
-      sx={{
-        height: { xs: 250, sm: 300, md: 400 },
-        overflow: 'hidden',
-        borderRadius: 3,
-        position: 'relative',
-      }}
-      elevation={4}
-    >
-      <img
-        src={src}
-        alt={alt}
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          transition: 'transform 0.5s ease',
-        }}
-        onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
-        onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-        onError={(e) => {
-          e.currentTarget.style.display = 'none';
-        }}
-      />
-    </Paper>
-  );
-
   return (
     <Box>
-      {/* Hero section с фоном */}
+      {/* Hero */}
       <Box
         sx={{
           position: 'relative',
           height: '100vh',
-          backgroundImage: 'url("https://cdn.b12.io/client_media/7ohTLClx/6ce8fc2c-2475-11f0-8568-0242ac110002-rrMs7jb_550rmkulq_Wgk.jpg")', // ⚠️ Убедись, что /images/vinyl.jpg есть в public
+          backgroundImage: 'url("https://cdn.b12.io/client_media/7ohTLClx/6ce8fc2c-2475-11f0-8568-0242ac110002-rrMs7jb_550rmkulq_Wgk.jpg")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           display: 'flex',
@@ -75,7 +81,6 @@ export default function HomePage() {
           px: 2,
         }}
       >
-        {/* затемнение */}
         <Box
           sx={{
             position: 'absolute',
@@ -87,7 +92,6 @@ export default function HomePage() {
             zIndex: 1,
           }}
         />
-        {/* текст поверх изображения */}
         <Box sx={{ position: 'relative', zIndex: 2, maxWidth: 800 }}>
           <Typography variant="h2" sx={{ fontWeight: 'bold', mb: 2 }}>
             Мир музыки
