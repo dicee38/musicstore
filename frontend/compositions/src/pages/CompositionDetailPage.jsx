@@ -1,6 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCompositionById } from '../api/compositionsApi';
+import {
+  Box,
+  Typography,
+  Container,
+  Paper,
+  List,
+  ListItem,
+  ListItemText,
+  CircularProgress,
+} from '@mui/material';
+import { keyframes } from '@emotion/react';
+
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
 
 export default function CompositionDetailPage() {
   const { id } = useParams();
@@ -10,20 +26,48 @@ export default function CompositionDetailPage() {
     getCompositionById(id).then(setComposition);
   }, [id]);
 
-  if (!composition) return <div>Загрузка...</div>;
+  if (!composition) {
+    return (
+      <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
-    <div>
-      <h2>{composition.title}</h2>
-      <p><strong>Композитор:</strong> {composition.composer}</p>
-      <p><strong>Описание:</strong> {composition.description}</p>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        background: 'linear-gradient(to bottom, #f3f4f6, #ffffff)',
+        py: 8,
+        animation: `${fadeIn} 0.6s ease forwards`,
+        opacity: 0,
+      }}
+    >
+      <Container maxWidth="md">
+        <Paper elevation={4} sx={{ p: 4, borderRadius: 3 }}>
+          <Typography variant="h4" fontWeight="bold" gutterBottom>
+            {composition.title}
+          </Typography>
+          <Typography variant="subtitle1" gutterBottom>
+            <strong>Композитор:</strong> {composition.composer}
+          </Typography>
+          <Typography variant="body1" paragraph>
+            <strong>Описание:</strong> {composition.description}
+          </Typography>
 
-      <h3>Связанные пластинки:</h3>
-      <ul>
-        {composition.records.map((r) => (
-          <li key={r.id}>{r.title} ({r.year})</li>
-        ))}
-      </ul>
-    </div>
+          <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>
+            Связанные пластинки:
+          </Typography>
+          <List>
+            {composition.records.map((r) => (
+              <ListItem key={r.id} disableGutters>
+                <ListItemText primary={`${r.title} (${r.year})`} />
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
+      </Container>
+    </Box>
   );
 }
