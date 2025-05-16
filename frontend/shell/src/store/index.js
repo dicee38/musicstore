@@ -1,12 +1,13 @@
-// shell/src/store/index.js
 import { configureStore } from '@reduxjs/toolkit';
-import userReducer, { logout, login } from 'auth/store/userSlice'; // 👈 импорт из REMOTE auth
+import userReducer, { logout, login } from 'auth/store/userSlice';
+import cartReducer, { addToCart, removeFromCart, clearCart, decrementQuantity } from './cartSlice';
 
 const store = configureStore({
   reducer: {
-    user: userReducer
+    user: userReducer,
+    cart: cartReducer,
   },
 });
 
 export default store;
-export { logout, login  };
+export { logout, login, addToCart, removeFromCart, clearCart, decrementQuantity };

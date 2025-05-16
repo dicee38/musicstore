@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { getCompositionById } from '../api/compositionsApi';
 import {
   Box,
   Typography,
   Container,
   Paper,
-  List,
-  ListItem,
-  ListItemText,
+  Grid,
   CircularProgress,
   Divider,
   Chip,
@@ -46,7 +44,7 @@ export default function CompositionDetailPage() {
         opacity: 0,
       }}
     >
-      <Container maxWidth="md">
+      <Container maxWidth="lg">
         <Paper elevation={4} sx={{ p: 5, borderRadius: 3 }}>
           <Typography variant="h4" fontWeight="bold" gutterBottom>
             {composition.title}
@@ -63,24 +61,60 @@ export default function CompositionDetailPage() {
             {composition.description}
           </Typography>
 
-          <Divider sx={{ my: 3 }} />
+          <Divider sx={{ my: 4 }} />
 
           <Typography variant="h6" gutterBottom>
-            Связанные пластинки
-          </Typography>
-          {composition.records.length === 0 ? (
-            <Typography variant="body2" color="text.secondary">
-              Нет связанных пластинок
-            </Typography>
-          ) : (
-            <List>
-              {composition.records.map((r) => (
-                <ListItem key={r.id} disableGutters>
-                  <ListItemText primary={`${r.title} (${r.year})`} />
-                </ListItem>
-              ))}
-            </List>
+  Связанные пластинки
+</Typography>
+{composition.records.length === 0 ? (
+  <Typography variant="body2" color="text.secondary">
+    Нет связанных пластинок
+  </Typography>
+) : (
+  <Grid container spacing={4}>
+    {composition.records.map((record) => (
+      <Grid item key={record.id} xs={12} sm={6} md={4}>
+        <Paper
+          component={Link}
+          to={`/records/${record.id}`}
+          elevation={3}
+          sx={{
+            textDecoration: 'none',
+            overflow: 'hidden',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            transition: '0.3s',
+            '&:hover': { boxShadow: 6 },
+          }}
+        >
+          {record.image && (
+            <Box
+              component="img"
+              src={record.image}
+              alt={record.title}
+              sx={{ width: '100%', height: 200, objectFit: 'cover' }}
+            />
           )}
+          <Box sx={{ p: 2 }}>
+            <Typography variant="subtitle1" fontWeight="bold">
+              {record.title}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {record.year}
+            </Typography>
+            {record.price && (
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                {record.price} ₽
+              </Typography>
+            )}
+          </Box>
+        </Paper>
+      </Grid>
+    ))}
+  </Grid>
+)}
+
         </Paper>
       </Container>
     </Box>

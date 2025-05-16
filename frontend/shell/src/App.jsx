@@ -1,19 +1,20 @@
 import React, { Suspense, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useDispatch } from 'react-redux';
-import { login } from './store/index'; // путь поправь при необходимости
+import { login } from './store/index';
 
 import Header from './components/Header';
 import Navigation from './components/Navigation';
 import { Box, CircularProgress, Container } from '@mui/material';
-import HomePage from './pages/Homepage.jsx';
+import HomePage from './pages/Homepage';
+import CartPage from './pages/CartPage'; // ✅ импорт корзины
 
 // Защищённые маршруты
 import PrivateRoute from './router/PrivateRoute';
 import AdminRoute from './router/AdminRoute';
 
-// Ленивая загрузка микрофронтендов
+// Микрофронтенды
 const AuthApp = React.lazy(() => import('auth/AuthApp'));
 const CompositionsApp = React.lazy(() => import('compositions/CompositionsApp'));
 const EnsemblesApp = React.lazy(() => import('ensembles/EnsemblesApp'));
@@ -23,7 +24,6 @@ const AdminApp = React.lazy(() =>
   import('admin/AdminApp').then((m) => ({ default: m.default || m }))
 );
 
-// Кастомная тема
 const theme = createTheme({
   palette: {
     primary: { main: '#00796b' },
@@ -40,7 +40,6 @@ const theme = createTheme({
 export default function App() {
   const dispatch = useDispatch();
 
-  // 🔁 Восстановление авторизации при загрузке
   useEffect(() => {
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');
@@ -53,64 +52,62 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-        <div>
-          <Header />
-          <Navigation />
-          <Suspense
-            fallback={
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  minHeight: '100vh',
-                  backgroundColor: theme.palette.background.default,
-                }}
-              >
-                <CircularProgress sx={{ color: theme.palette.primary.main }} />
-              </Box>
-            }
-          >
-            <Container sx={{ marginTop: 2 }}>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/auth/*" element={<AuthApp />} />
-                <Route path="/compositions/*" element={<CompositionsApp />} />
-                <Route path="/ensembles/*" element={<EnsemblesApp />} />
-                <Route path="/records/*" element={<RecordsApp />} />
-                <Route path="/top/*" element={<TopApp />} />
+      <div>
+        <Header />
+        <Navigation />
+        <Suspense
+          fallback={
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100vh',
+                backgroundColor: theme.palette.background.default,
+              }}
+            >
+              <CircularProgress sx={{ color: theme.palette.primary.main }} />
+            </Box>
+          }
+        >
+          <Container sx={{ marginTop: 2 }}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/auth/*" element={<AuthApp />} />
+              <Route path="/compositions/*" element={<CompositionsApp />} />
+              <Route path="/ensembles/*" element={<EnsemblesApp />} />
+              <Route path="/records/*" element={<RecordsApp />} />
+              <Route path="/top/*" element={<TopApp />} />
 
-                {/* 🔒 Только авторизованные */}
-                <Route
-                  path="/profile"
-                  element={
-                    <PrivateRoute>
-                      <div>Страница профиля</div>
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path="/cart"
-                  element={
-                    <PrivateRoute>
-                      <div>Корзина</div>
-                    </PrivateRoute>
-                  }
-                />
+              <Route
+                path="/profile"
+                element={
+                  <PrivateRoute>
+                    <div>Страница профиля</div>
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/cart"
+                element={
+                  <PrivateRoute>
+                    <CartPage />
+                  </PrivateRoute>
+                }
+              />
 
-                {/* 👑 Только для админа */}
-                <Route
-                  path="/admin/*"
-                  element={
-                    <AdminRoute>
-                      <AdminApp />
-                    </AdminRoute>
-                  }
-                />
-              </Routes>
-            </Container>
-          </Suspense>
-        </div>
+              <Route
+                path="/admin/*"
+                element={
+                  <AdminRoute>
+                    <AdminApp />
+                  </AdminRoute>
+                }
+              />
+            </Routes>
+          </Container>
+        </Suspense>
+      </div>
     </ThemeProvider>
   );
 }

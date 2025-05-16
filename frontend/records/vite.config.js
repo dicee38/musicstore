@@ -8,6 +8,9 @@ export default defineConfig({
     federation({
       name: 'records',
       filename: 'remoteEntry.js',
+      remotes: {
+    shell: 'http://localhost:3000/assets/remoteEntry.js'
+  },
       exposes: {
         './RecordsApp': './src/App.jsx'
       },
