@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { registerApi } from '../api/authApi';
+import { registerApi, loginApi } from '../api/authApi';
+import { useDispatch } from 'react-redux';
+import { login } from '../store/userSlice';
 import {
   Box,
   Typography,
@@ -9,7 +11,7 @@ import {
   Paper,
 } from '@mui/material';
 import { keyframes } from '@emotion/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -19,11 +21,18 @@ const fadeIn = keyframes`
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await registerApi(email, password);
-    alert('Вы успешно зарегистрированы!');
+
+    const userData = await loginApi(email, password); // авто-вход
+    if (userData && userData.role) {
+      dispatch(login({ role: userData.role }));
+      navigate(userData.role === 'admin' ? '/admin' : '/');
+    }
   };
 
   return (
@@ -75,7 +84,7 @@ export default function RegisterPage() {
           </Button>
         </Box>
         <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
-          Уже есть аккаунт? <Link to="/">Войти</Link>
+          Уже есть аккаунт? <Link to="/auth/login">Войти</Link>
         </Typography>
       </Paper>
     </Box>

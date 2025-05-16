@@ -10,6 +10,8 @@ import {
   ListItem,
   ListItemText,
   CircularProgress,
+  Divider,
+  Chip,
 } from '@mui/material';
 import { keyframes } from '@emotion/react';
 
@@ -38,34 +40,47 @@ export default function CompositionDetailPage() {
     <Box
       sx={{
         minHeight: '100vh',
-        background: 'linear-gradient(to bottom, #f3f4f6, #ffffff)',
+        background: 'linear-gradient(to bottom, #eef1f5, #ffffff)',
         py: 8,
         animation: `${fadeIn} 0.6s ease forwards`,
         opacity: 0,
       }}
     >
       <Container maxWidth="md">
-        <Paper elevation={4} sx={{ p: 4, borderRadius: 3 }}>
+        <Paper elevation={4} sx={{ p: 5, borderRadius: 3 }}>
           <Typography variant="h4" fontWeight="bold" gutterBottom>
             {composition.title}
           </Typography>
-          <Typography variant="subtitle1" gutterBottom>
-            <strong>Композитор:</strong> {composition.composer}
-          </Typography>
+
+          <Chip
+            label={`Композитор: ${composition.composer}`}
+            color="primary"
+            variant="outlined"
+            sx={{ mb: 2 }}
+          />
+
           <Typography variant="body1" paragraph>
-            <strong>Описание:</strong> {composition.description}
+            {composition.description}
           </Typography>
 
-          <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>
-            Связанные пластинки:
+          <Divider sx={{ my: 3 }} />
+
+          <Typography variant="h6" gutterBottom>
+            Связанные пластинки
           </Typography>
-          <List>
-            {composition.records.map((r) => (
-              <ListItem key={r.id} disableGutters>
-                <ListItemText primary={`${r.title} (${r.year})`} />
-              </ListItem>
-            ))}
-          </List>
+          {composition.records.length === 0 ? (
+            <Typography variant="body2" color="text.secondary">
+              Нет связанных пластинок
+            </Typography>
+          ) : (
+            <List>
+              {composition.records.map((r) => (
+                <ListItem key={r.id} disableGutters>
+                  <ListItemText primary={`${r.title} (${r.year})`} />
+                </ListItem>
+              ))}
+            </List>
+          )}
         </Paper>
       </Container>
     </Box>

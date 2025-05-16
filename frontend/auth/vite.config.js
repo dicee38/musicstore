@@ -9,7 +9,8 @@ export default defineConfig({
       name: 'auth',
       filename: 'remoteEntry.js',
       exposes: {
-        './AuthApp': './src/App.jsx'
+        './AuthApp': './src/App.jsx',
+        './store/userSlice': './src/store/userSlice.js' 
       },
       shared: ['react', 'react-dom', 'react-router-dom', 'react-redux', '@reduxjs/toolkit']
     })

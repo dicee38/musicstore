@@ -35,7 +35,10 @@ model Record {
   year        Int
   description String?
   price       Float
+  image       String?      // ссылка на обложку или фото
+  stock       Int?         // количество на складе
   sales       Int          @default(0)
+
   ensemble    Ensemble?    @relation(fields: [ensembleId], references: [id])
   ensembleId  Int?
 
@@ -77,7 +80,7 @@ model Company {
 }
 
 model Top {
-  id       Int    @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   category String
-  items    String[] // массив названий или slug’ов, можно поменять на связи
+  items    String[] // массив названий или slug’ов, можно заменить связями
 }

@@ -6,10 +6,10 @@ import {
   Typography,
   Container,
   Paper,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
+  Grid,
+  Card,
+  CardContent,
+  CardActionArea,
   CircularProgress,
 } from '@mui/material';
 import { keyframes } from '@emotion/react';
@@ -38,27 +38,31 @@ export default function CompositionListPage() {
     <Box
       sx={{
         minHeight: '100vh',
-        background: 'linear-gradient(to bottom, #f0f2f5, #ffffff)',
+        background: 'linear-gradient(to bottom, #f5f7fa, #ffffff)',
         py: 8,
         animation: `${fadeIn} 0.6s ease forwards`,
         opacity: 0,
       }}
     >
-      <Container maxWidth="sm">
-        <Paper elevation={4} sx={{ p: 4, borderRadius: 3 }}>
-          <Typography variant="h4" fontWeight="bold" gutterBottom textAlign="center">
-            Произведения
-          </Typography>
-          <List>
-            {compositions.map((comp) => (
-              <ListItem key={comp.id} disablePadding>
-                <ListItemButton component={Link} to={`/compositions/${comp.id}`}>
-                  <ListItemText primary={comp.title} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Paper>
+      <Container>
+        <Typography variant="h4" fontWeight="bold" gutterBottom textAlign="center">
+          Произведения
+        </Typography>
+        <Grid container spacing={3}>
+          {compositions.map((comp) => (
+            <Grid item xs={12} sm={6} md={4} key={comp.id}>
+              <Card elevation={3} sx={{ borderRadius: 2 }}>
+                <CardActionArea component={Link} to={`/compositions/${comp.id}`}>
+                  <CardContent>
+                    <Typography variant="h6" fontWeight="medium">
+                      {comp.title}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       </Container>
     </Box>
   );

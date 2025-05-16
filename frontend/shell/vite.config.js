@@ -15,7 +15,16 @@ export default defineConfig({
         top: 'http://localhost:3005/assets/remoteEntry.js',
         admin: 'http://localhost:3006/assets/remoteEntry.js'
       },
-      shared: ['react', 'react-dom', 'react-router-dom']
+      shared: {
+        react: { singleton: true, requiredVersion: '^18.0.0' },
+        'react-dom': { singleton: true, requiredVersion: '^18.0.0' },
+        'react-router-dom': { singleton: true, requiredVersion: '^6.0.0' },
+        'react-redux': { singleton: true, requiredVersion: '^8.0.0' },
+        '@reduxjs/toolkit': { singleton: true, requiredVersion: '^1.9.0' },
+        '@mui/material': { singleton: true, requiredVersion: '^5.0.0' },
+        '@emotion/react': { singleton: true, requiredVersion: '^11.0.0' },
+        '@emotion/styled': { singleton: true, requiredVersion: '^11.0.0' },
+      }
     })
   ],
   server: {
@@ -25,10 +34,9 @@ export default defineConfig({
     port: 3000,
   },
   build: {
-    target: 'esnext', // Устанавливаем target на esnext
+    target: 'esnext',
     modulePreload: false,
     cssCodeSplit: false,
     minify: false
   }
 });
-  

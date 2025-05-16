@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { login } from '../store/userSlice';
 import { loginApi } from '../api/authApi';
 import { Link } from 'react-router-dom';
 import {
@@ -8,7 +6,6 @@ import {
   Typography,
   Button,
   TextField,
-  Container,
   Paper,
 } from '@mui/material';
 import { keyframes } from '@emotion/react';
@@ -21,13 +18,21 @@ const fadeIn = keyframes`
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const userData = await loginApi(email, password);
-    if (userData) {
-      dispatch(login(userData));
+
+    if (userData && userData.role && userData.token) {
+      // ✅ Сохраняем в localStorage для Shell
+      localStorage.setItem('token', userData.token);
+      localStorage.setItem('email', userData.email);
+      localStorage.setItem('role', userData.role);
+
+      // 🔁 Форс-редирект в Shell, где Redux восстановит авторизацию
+      window.location.href = userData.role === 'admin' ? '/admin' : '/';
+    } else {
+      alert('Неверный логин или пароль');
     }
   };
 

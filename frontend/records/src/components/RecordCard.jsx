@@ -1,11 +1,38 @@
 import React from 'react';
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+} from '@mui/material';
 
 export default function RecordCard({ record }) {
-  console.log('RecordCard props:', record);
   return (
-    <div style={{ border: '1px solid #ccc', padding: '1rem', margin: '0.5rem' }}>
-      <h4>{record.title}</h4>
-      <p>{record.year}</p>
-    </div>
+    <Card elevation={3} sx={{ height: '100%' }}>
+      {record.image && (
+        <CardMedia
+          component="img"
+          height="200"
+          image={record.image}
+          alt={record.title}
+        />
+      )}
+      <CardContent>
+        <Typography variant="h6" fontWeight="bold" gutterBottom>
+          {record.title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {record.year}
+        </Typography>
+        <Typography variant="body2" sx={{ mt: 1 }}>
+          {record.price} ₽
+        </Typography>
+        {record.ensemble && (
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+            Ансамбль: {record.ensemble.name}
+          </Typography>
+        )}
+      </CardContent>
+    </Card>
   );
 }

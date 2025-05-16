@@ -7,40 +7,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  USER
-  ADMIN
-}
-
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
+  id       Int    @id @default(autoincrement())
+  email    String @unique
   password String
-  role     Role    @default(USER)
-  orders   Order[]
-}
-
-model Order {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  total     Float
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
-  records   Record[] @relation("OrderRecords")
+  role     Role   @default(USER)
 }
 
 model Record {
-  id          Int          @id @default(autoincrement())
-  title       String
-  year        Int
-  description String?
-  price       Float
-  sales       Int          @default(0)
-  ensemble    Ensemble?    @relation(fields: [ensembleId], references: [id])
-  ensembleId  Int?
-
+  id           Int           @id @default(autoincrement())
+  title        String
+  year         Int
+  description  String?
+  sales        Int           @default(0)
+  ensembleId   Int?
+  ensemble     Ensemble?     @relation(fields: [ensembleId], references: [id])
   compositions Composition[] @relation("RecordCompositions")
-  orders       Order[]       @relation("OrderRecords")
 }
 
 model Ensemble {
@@ -56,17 +38,16 @@ model Composition {
   title       String
   composer    String
   description String?
-
-  ensembles Ensemble[] @relation("EnsembleCompositions")
-  records   Record[]   @relation("RecordCompositions")
+  ensembles   Ensemble[] @relation("EnsembleCompositions")
+  records     Record[]   @relation("RecordCompositions")
 }
 
 model Musician {
   id         Int      @id @default(autoincrement())
   name       String
   instrument String
-  ensemble   Ensemble @relation(fields: [ensembleId], references: [id])
   ensembleId Int
+  ensemble   Ensemble @relation(fields: [ensembleId], references: [id])
 }
 
 model Company {
@@ -77,7 +58,12 @@ model Company {
 }
 
 model Top {
-  id       Int    @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   category String
-  items    String[] // массив названий или slug’ов, можно поменять на связи
+  items    String[]
+}
+
+enum Role {
+  USER
+  ADMIN
 }

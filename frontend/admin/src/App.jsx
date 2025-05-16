@@ -11,7 +11,7 @@ export default function AdminApp() {
     <Provider store={store}>    
      <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/admin/:entity" element={<EntityManager />} />
+        <Route path="/:entity" element={<EntityManager />} />
       </Routes>
       </Provider>
  

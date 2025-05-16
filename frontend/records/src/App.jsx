@@ -7,7 +7,7 @@ export default function RecordsApp() {
   return (
       <Routes>
         <Route path="/" element={<RecordListPage />} />
-        <Route path="/records/:id" element={<RecordDetailPage />} />
+        <Route path="/:id" element={<RecordDetailPage />} />
       </Routes>
   );
 }

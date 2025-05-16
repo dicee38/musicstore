@@ -10,7 +10,7 @@ export default function AuthApp() {
     <Provider store={store}>
     <Routes>
       <Route path="/" element={<LoginPage />} />
-      <Route path="/auth/register" element={<RegisterPage />} />
+      <Route path="/register" element={<RegisterPage />} />
     </Routes>
     </Provider>
     

@@ -7,7 +7,7 @@ export default function EnsemblesApp() {
   return (
       <Routes>
         <Route path="/" element={<EnsembleListPage />} />
-        <Route path="/ensembles/:id" element={<EnsembleDetailPage />} />
+        <Route path="/:id" element={<EnsembleDetailPage />} />
       </Routes>
    
   );
