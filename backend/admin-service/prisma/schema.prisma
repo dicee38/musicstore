@@ -13,12 +13,18 @@ enum Role {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  password String
-  role     Role    @default(USER)
-  orders   Order[]
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  password   String
+  role       Role     @default(USER)
+  firstName  String?
+  lastName   String?
+  middleName String?
+  phone      String?
+  address    String?
+  orders     Order[]
 }
+
 
 model Order {
   id        Int      @id @default(autoincrement())

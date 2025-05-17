@@ -12,13 +12,8 @@ import {
   CircularProgress,
   Alert,
   Button,
+  Divider,
 } from '@mui/material';
-import { keyframes } from '@emotion/react';
-
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
 
 export default function RecordDetailPage() {
   const { id } = useParams();
@@ -60,86 +55,59 @@ export default function RecordDetailPage() {
   }
 
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        background: 'linear-gradient(to bottom, #f2f2f2, #ffffff)',
-        py: 8,
-        animation: `${fadeIn} 0.6s ease forwards`,
-        opacity: 0,
-      }}
-    >
+    <Box sx={{ minHeight: '100vh', background: '#f9f9f9', py: 8 }}>
       <Container maxWidth="lg">
-        <Paper elevation={6} sx={{ p: 5, borderRadius: 4 }}>
-          <Grid container spacing={6} alignItems="center">
-            <Grid item xs={12} md={8}>
-              <Typography variant="h3" fontWeight="bold" gutterBottom>
+        <Grid container spacing={6}>
+          {/* Картинка слева */}
+          <Grid item xs={12} md={5}>
+            <Paper elevation={4} sx={{ overflow: 'hidden' }}>
+              <Box
+                component="img"
+                src={`/images/${record.id}.jpg`}
+                alt={record.title}
+                sx={{ width: '100%', height: 500, objectFit: 'cover', display: 'block' }}
+              />
+            </Paper>
+          </Grid>
+
+          {/* Информация справа */}
+          <Grid item xs={12} md={7}>
+            <Paper elevation={4} sx={{ p: 4 }}>
+              <Typography variant="h4" fontWeight="bold" gutterBottom>
                 {record.title}
               </Typography>
-              <Typography variant="h6" gutterBottom>
-                <strong>Год выпуска:</strong> {record.year}
-              </Typography>
-              <Typography variant="h6" gutterBottom>
-                <strong>Ансамбль:</strong>{' '}
-                {record.ensemble?.name ? (
-                  <Link to={`/ensembles/${record.ensemble.id}`} style={{ textDecoration: 'none', color: '#1976d2' }}>
-                    {record.ensemble.name}
-                  </Link>
-                ) : (
-                  '—'
-                )}
-              </Typography>
-              <Typography variant="body1" sx={{ mt: 3, mb: 3 }}>
+
+              <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
                 {record.description || 'Описание отсутствует'}
               </Typography>
-              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-                Цена: {record.price} ₽
+
+              <Divider sx={{ my: 2 }} />
+
+              <Typography variant="body1">
+                <strong>Год выпуска:</strong> {record.year}
               </Typography>
-              <Button variant="contained" size="large" sx={{ mt: 3 }} onClick={handleAddToCart}>
+
+              <Typography variant="body1" sx={{ my: 1 }}>
+                <strong>Ансамбль:</strong>{' '}
+                {record.ensemble?.name ? (
+                  <Link to={`/ensembles/${record.ensemble.id}`} style={{ color: '#1976d2', textDecoration: 'none' }}>
+                    {record.ensemble.name}
+                  </Link>
+                ) : '—'}
+              </Typography>
+
+              <Typography variant="body1" sx={{ my: 1 }}>
+                <strong>Цена:</strong> {record.price} ₽
+              </Typography>
+
+              <Divider sx={{ my: 2 }} />
+
+              <Button variant="contained" color="primary" size="large" onClick={handleAddToCart}>
                 В корзину
               </Button>
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-  <Paper
-    elevation={3}
-    sx={{
-      overflow: 'hidden',
-      transition: '0.3s',
-      '&:hover': { boxShadow: 6 },
-    }}
-  >
-    {record.image ? (
-      <Box
-        component="img"
-        src={record.image}
-        alt={record.title}
-        sx={{
-          width: '100%',
-          height: 300,
-          objectFit: 'cover',
-          display: 'block'
-        }}
-      />
-    ) : (
-      <Box
-        sx={{
-          width: '100%',
-          height: 300,
-          backgroundColor: '#e0e0e0',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Typography color="text.secondary">Нет изображения</Typography>
-      </Box>
-    )}
-  </Paper>
-</Grid>
-
+            </Paper>
           </Grid>
-        </Paper>
+        </Grid>
       </Container>
     </Box>
   );

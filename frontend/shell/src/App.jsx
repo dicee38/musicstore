@@ -9,6 +9,8 @@ import Navigation from './components/Navigation';
 import { Box, CircularProgress, Container } from '@mui/material';
 import HomePage from './pages/Homepage';
 import CartPage from './pages/CartPage'; // ✅ импорт корзины
+import ProfilePage from './pages/ProfilePage';
+
 
 // Защищённые маршруты
 import PrivateRoute from './router/PrivateRoute';
@@ -80,13 +82,14 @@ export default function App() {
               <Route path="/top/*" element={<TopApp />} />
 
               <Route
-                path="/profile"
-                element={
-                  <PrivateRoute>
-                    <div>Страница профиля</div>
-                  </PrivateRoute>
-                }
-              />
+  path="/profile"
+  element={
+    <PrivateRoute>
+      <ProfilePage />
+    </PrivateRoute>
+  }
+/>
+
               <Route
                 path="/cart"
                 element={
