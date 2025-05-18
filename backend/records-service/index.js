@@ -5,6 +5,8 @@ const { PrismaClient } = require('@prisma/client');
 const app = express();
 const prisma = new PrismaClient();
 const PORT = 4002;
+const errorHandler = require('./middlewares/errorHandler');
+app.use(errorHandler);
 
 app.use(cors());
 app.use(express.json());
@@ -67,11 +69,15 @@ app.post('/api/records', async (req, res) => {
  * Обновить запись
  */
 app.put('/api/records/:id', async (req, res) => {
-  const { title, year, description, sales, ensembleId } = req.body;
+  const { title, year, description, sales, ensembleId, price } = req.body;
+  const recordId = parseInt(req.params.id);
   try {
+    const exists = await prisma.record.findUnique({ where: { id: recordId } });
+    if (!exists) return res.status(404).json({ error: 'Record not found' });
+
     const updated = await prisma.record.update({
-      where: { id: parseInt(req.params.id) },
-      data: { title, year, description, sales, ensembleId },
+      where: { id: recordId },
+      data: { title, year, description, sales, ensembleId, price },
     });
     res.json(updated);
   } catch (err) {

@@ -23,7 +23,7 @@ services:
       - DATABASE_URL=postgresql://unical:unical@postgres:5432/musicstore?schema=public
     depends_on:
       - postgres
-    command: sh -c "npx prisma generate && node index.js"
+    command: sh -c "npx prisma generate && npx prisma db push && node index.js"
 
   records-service:
     build: ./records-service
@@ -35,7 +35,7 @@ services:
       - DATABASE_URL=postgresql://unical:unical@postgres:5432/musicstore?schema=public
     depends_on:
       - postgres
-    command: sh -c "npx prisma generate && node index.js"
+    command: sh -c "npx prisma generate && npx prisma db push && node index.js"
 
   ensembles-service:
     build: ./ensembles-service
@@ -47,7 +47,7 @@ services:
       - DATABASE_URL=postgresql://unical:unical@postgres:5432/musicstore?schema=public
     depends_on:
       - postgres
-    command: sh -c "npx prisma generate && node index.js"
+    command: sh -c "npx prisma generate && npx prisma db push && node index.js"
 
   compositions-service:
     build: ./compositions-service
@@ -59,7 +59,7 @@ services:
       - DATABASE_URL=postgresql://unical:unical@postgres:5432/musicstore?schema=public
     depends_on:
       - postgres
-    command: sh -c "npx prisma generate && node index.js"
+    command: sh -c "npx prisma generate && npx prisma db push && node index.js"
 
   top-service:
     build: ./top-service
@@ -71,7 +71,7 @@ services:
       - DATABASE_URL=postgresql://unical:unical@postgres:5432/musicstore?schema=public
     depends_on:
       - postgres
-    command: sh -c "npx prisma generate && node index.js"
+    command: sh -c "npx prisma generate && npx prisma db push && node index.js"
 
   admin-service:
     build: ./admin-service
@@ -83,6 +83,26 @@ services:
       - DATABASE_URL=postgresql://unical:unical@postgres:5432/musicstore?schema=public
     depends_on:
       - postgres
+    command: sh -c "npx prisma generate && npx prisma db push && node index.js"
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"     # AMQP (основной протокол)
+      - "15672:15672"   # веб-интерфейс RabbitMQ
+    restart: unless-stopped
+
+  records-worker:
+    build:
+      context: ./records-service
+    volumes:
+      - ./records-service:/app
+    command: sh -c "node worker.js"
+    depends_on:
+      - rabbitmq
+      - records-service
+    restart: always
+    environment:
+      - DATABASE_URL="postgresql://unical:610999@localhost:5432/musicstore?schema=public"
 
 volumes:
   pgdata:
