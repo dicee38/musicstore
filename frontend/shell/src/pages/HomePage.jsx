@@ -146,7 +146,7 @@ export default function HomePage() {
           <Grid container spacing={4} alignItems="center">
             <Grid item xs={12} md={6} order={{ xs: 2, md: 1 }}>
               <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                Альбомы 2022 года
+                Альбомы
               </Typography>
               <Typography variant="body1" sx={{ mt: 2 }}>
                 Самые популярные релизы, вошедшие в историю. Лучшие альбомы по мнению критиков и слушателей.

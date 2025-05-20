@@ -4,3 +4,4 @@
 {"from":"log-queue","level":"info","message":{"order":{"id":1,"itemIds":[108],"timestamp":"2025-05-20T14:37:51.641Z","total":25.99,"userId":4},"type":"order_created"},"timestamp":"2025-05-20T14:37:51.646Z"}
 {"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"rabbit@test.com","id":4,"timestamp":"2025-05-20T14:47:00.896Z"}},"timestamp":"2025-05-20T14:47:00.901Z"}
 {"from":"log-queue","level":"info","message":{"type":"profile_updated","user":{"email":"rabbit@test.com","id":4,"timestamp":"2025-05-20T14:47:43.290Z"}},"timestamp":"2025-05-20T14:47:43.296Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin123","id":9,"timestamp":"2025-05-20T21:43:37.301Z"}},"timestamp":"2025-05-20T21:43:37.340Z"}
