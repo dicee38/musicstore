@@ -35,7 +35,7 @@ services:
       - DATABASE_URL=postgresql://unical:unical@postgres:5432/musicstore?schema=public
     depends_on:
       - postgres
-    command: sh -c "npx prisma generate && npx prisma db push && node index.js"
+    command: sh -c "npx prisma generate && node index.js"
 
   ensembles-service:
     build: ./ensembles-service
@@ -47,7 +47,7 @@ services:
       - DATABASE_URL=postgresql://unical:unical@postgres:5432/musicstore?schema=public
     depends_on:
       - postgres
-    command: sh -c "npx prisma generate && npx prisma db push && node index.js"
+    command: sh -c "npx prisma generate && node index.js"
 
   compositions-service:
     build: ./compositions-service
@@ -59,7 +59,8 @@ services:
       - DATABASE_URL=postgresql://unical:unical@postgres:5432/musicstore?schema=public
     depends_on:
       - postgres
-    command: sh -c "npx prisma generate && npx prisma db push && node index.js"
+      - redis
+    command: sh -c "npx prisma generate && node index.js"
 
   top-service:
     build: ./top-service

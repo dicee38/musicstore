@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { PrismaClient } = require('@prisma/client');
+const ensembleRoutes = require('./routers/ensembleRouters');
 
 const app = express();
 const prisma = new PrismaClient();
@@ -9,143 +10,8 @@ const PORT = 4003;
 app.use(cors());
 app.use(express.json());
 
-/**
- * === ENSEMBLES ===
- */
-
-// Получить все ансамбли
-app.get('/api/ensembles', async (req, res) => {
-  try {
-    const ensembles = await prisma.ensemble.findMany({
-      include: { musicians: true, records: true },
-    });
-    res.json(ensembles);
-  } catch (err) {
-    res.status(500).json({ error: 'Ошибка при получении ансамблей' });
-  }
-});
-
-// Получить ансамбль по ID
-app.get('/api/ensembles/:id', async (req, res) => {
-  try {
-    const ensemble = await prisma.ensemble.findUnique({
-      where: { id: parseInt(req.params.id) },
-      include: { musicians: true, records: true },
-    });
-    if (!ensemble) return res.sendStatus(404);
-    res.json(ensemble);
-  } catch (err) {
-    res.status(500).json({ error: 'Ошибка при получении ансамбля' });
-  }
-});
-
-// Создать ансамбль
-app.post('/api/ensembles', async (req, res) => {
-  const { name } = req.body;
-  try {
-    const newEnsemble = await prisma.ensemble.create({
-      data: { name },
-    });
-    res.status(201).json(newEnsemble);
-  } catch (err) {
-    res.status(500).json({ error: 'Ошибка при создании ансамбля' });
-  }
-});
-
-// Обновить ансамбль
-app.put('/api/ensembles/:id', async (req, res) => {
-  const { name } = req.body;
-  try {
-    const updated = await prisma.ensemble.update({
-      where: { id: parseInt(req.params.id) },
-      data: { name },
-    });
-    res.json(updated);
-  } catch (err) {
-    res.status(500).json({ error: 'Ошибка при обновлении ансамбля' });
-  }
-});
-
-// Удалить ансамбль
-app.delete('/api/ensembles/:id', async (req, res) => {
-  try {
-    await prisma.ensemble.delete({
-      where: { id: parseInt(req.params.id) },
-    });
-    res.sendStatus(204);
-  } catch (err) {
-    res.status(500).json({ error: 'Ошибка при удалении ансамбля' });
-  }
-});
-
-/**
- * === MUSICIANS ===
- */
-
-// Получить всех музыкантов
-app.get('/api/musicians', async (req, res) => {
-  try {
-    const musicians = await prisma.musician.findMany({
-      include: { ensemble: true },
-    });
-    res.json(musicians);
-  } catch (err) {
-    res.status(500).json({ error: 'Ошибка при получении музыкантов' });
-  }
-});
-
-// Получить музыканта по ID
-app.get('/api/musicians/:id', async (req, res) => {
-  try {
-    const musician = await prisma.musician.findUnique({
-      where: { id: parseInt(req.params.id) },
-      include: { ensemble: true },
-    });
-    if (!musician) return res.sendStatus(404);
-    res.json(musician);
-  } catch (err) {
-    res.status(500).json({ error: 'Ошибка при получении музыканта' });
-  }
-});
-
-// Создать музыканта
-app.post('/api/musicians', async (req, res) => {
-  const { name, instrument, ensembleId } = req.body;
-  try {
-    const newMusician = await prisma.musician.create({
-      data: { name, instrument, ensembleId },
-    });
-    res.status(201).json(newMusician);
-  } catch (err) {
-    res.status(500).json({ error: 'Ошибка при создании музыканта' });
-  }
-});
-
-// Обновить музыканта
-app.put('/api/musicians/:id', async (req, res) => {
-  const { name, instrument, ensembleId } = req.body;
-  try {
-    const updated = await prisma.musician.update({
-      where: { id: parseInt(req.params.id) },
-      data: { name, instrument, ensembleId },
-    });
-    res.json(updated);
-  } catch (err) {
-    res.status(500).json({ error: 'Ошибка при обновлении музыканта' });
-  }
-});
-
-// Удалить музыканта
-app.delete('/api/musicians/:id', async (req, res) => {
-  try {
-    await prisma.musician.delete({
-      where: { id: parseInt(req.params.id) },
-    });
-    res.sendStatus(204);
-  } catch (err) {
-    res.status(500).json({ error: 'Ошибка при удалении музыканта' });
-  }
-});
+// Routes
+app.use('/api/ensembles', ensembleRoutes);
 
 app.listen(PORT, () => {
   console.log(`✅ Ensembles service running on http://localhost:${PORT}`);

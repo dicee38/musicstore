@@ -1,52 +1,68 @@
 const { PrismaClient } = require('@prisma/client');
+const redis = require('../utils/redisClient');
 const prisma = new PrismaClient();
 
-exports.getAllMusicians = async (req, res) => {
-  try {
-    const musicians = await prisma.musician.findMany({ include: { ensemble: true } });
-    res.json(musicians);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
+const CACHE_KEY = 'ensembles:all';
 
-exports.getMusicianById = async (req, res) => {
+exports.getAllEnsembles = async (req, res) => {
   try {
-    const musician = await prisma.musician.findUnique({
-      where: { id: Number(req.params.id) },
-      include: { ensemble: true },
+    const cached = await redis.get(CACHE_KEY);
+    if (cached) {
+      console.log('[CACHE] ensembles returned from Redis');
+      return res.json(JSON.parse(cached));
+    }
+
+    const ensembles = await prisma.ensemble.findMany({
+      include: { musicians: true, records: true },
     });
-    if (!musician) return res.sendStatus(404);
-    res.json(musician);
+
+    await redis.set(CACHE_KEY, JSON.stringify(ensembles), 'EX', 60);
+    res.json(ensembles);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.createMusician = async (req, res) => {
+exports.getEnsembleById = async (req, res) => {
   try {
-    const created = await prisma.musician.create({ data: req.body });
+    const ensemble = await prisma.ensemble.findUnique({
+      where: { id: Number(req.params.id) },
+      include: { musicians: true, records: true },
+    });
+    if (!ensemble) return res.sendStatus(404);
+    res.json(ensemble);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.createEnsemble = async (req, res) => {
+  try {
+    const created = await prisma.ensemble.create({ data: req.body });
+    await redis.del(CACHE_KEY);
     res.status(201).json(created);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.updateMusician = async (req, res) => {
+exports.updateEnsemble = async (req, res) => {
   try {
-    const updated = await prisma.musician.update({
+    const updated = await prisma.ensemble.update({
       where: { id: Number(req.params.id) },
       data: req.body,
     });
+    await redis.del(CACHE_KEY);
     res.json(updated);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.deleteMusician = async (req, res) => {
+exports.deleteEnsemble = async (req, res) => {
   try {
-    await prisma.musician.delete({ where: { id: Number(req.params.id) } });
+    await prisma.ensemble.delete({ where: { id: Number(req.params.id) } });
+    await redis.del(CACHE_KEY);
     res.sendStatus(204);
   } catch (err) {
     res.status(500).json({ error: err.message });

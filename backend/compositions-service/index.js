@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { PrismaClient } = require('@prisma/client');
+const redis = require('./utils/redisClient');
 
 const app = express();
 const prisma = new PrismaClient();
@@ -14,9 +15,17 @@ app.use(express.json());
  */
 app.get('/api/compositions', async (req, res) => {
   try {
+    const cache = await redis.get('compositions:all');
+    if (cache) {
+      console.log('[CACHE] Returned compositions list from Redis');
+      return res.json(JSON.parse(cache));
+    }
+
     const compositions = await prisma.composition.findMany({
       include: { ensembles: true, records: true },
     });
+
+    await redis.set('compositions:all', JSON.stringify(compositions), 'EX', 60);
     res.json(compositions);
   } catch (err) {
     console.error(err);
@@ -28,12 +37,22 @@ app.get('/api/compositions', async (req, res) => {
  * Получить одну композицию
  */
 app.get('/api/compositions/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+  const key = `compositions:${id}`;
   try {
+    const cache = await redis.get(key);
+    if (cache) {
+      console.log(`[CACHE] Returned composition ${id} from Redis`);
+      return res.json(JSON.parse(cache));
+    }
+
     const composition = await prisma.composition.findUnique({
-      where: { id: parseInt(req.params.id) },
+      where: { id },
       include: { ensembles: true, records: true },
     });
     if (!composition) return res.sendStatus(404);
+
+    await redis.set(key, JSON.stringify(composition), 'EX', 60);
     res.json(composition);
   } catch (err) {
     res.status(500).json({ error: 'Ошибка при получении композиции' });
@@ -49,6 +68,8 @@ app.post('/api/compositions', async (req, res) => {
     const newComposition = await prisma.composition.create({
       data: { title, composer, description },
     });
+
+    await redis.del('compositions:all'); // сбрасываем список
     res.status(201).json(newComposition);
   } catch (err) {
     res.status(500).json({ error: 'Ошибка при создании композиции' });
@@ -60,11 +81,15 @@ app.post('/api/compositions', async (req, res) => {
  */
 app.put('/api/compositions/:id', async (req, res) => {
   const { title, composer, description } = req.body;
+  const id = parseInt(req.params.id);
   try {
     const updated = await prisma.composition.update({
-      where: { id: parseInt(req.params.id) },
+      where: { id },
       data: { title, composer, description },
     });
+
+    await redis.del(`compositions:${id}`);
+    await redis.del('compositions:all');
     res.json(updated);
   } catch (err) {
     res.status(500).json({ error: 'Ошибка при обновлении композиции' });
@@ -75,10 +100,12 @@ app.put('/api/compositions/:id', async (req, res) => {
  * Удалить композицию
  */
 app.delete('/api/compositions/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
   try {
-    await prisma.composition.delete({
-      where: { id: parseInt(req.params.id) },
-    });
+    await prisma.composition.delete({ where: { id } });
+
+    await redis.del(`compositions:${id}`);
+    await redis.del('compositions:all');
     res.sendStatus(204);
   } catch (err) {
     res.status(500).json({ error: 'Ошибка при удалении композиции' });
