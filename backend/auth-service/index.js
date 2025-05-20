@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser');
 const { PrismaClient } = require('@prisma/client');
+const { publishLog } = require('./queues/publisher');
 
 const app = express();
 const prisma = new PrismaClient();
@@ -23,7 +24,19 @@ app.post('/api/register', async (req, res) => {
     if (existing) return res.status(400).json({ error: 'Пользователь уже существует' });
 
     const hash = await bcrypt.hash(password, 10);
-    await prisma.user.create({ data: { email, password: hash, role: 'USER' } }); // 👈 важно
+    const newUser = await prisma.user.create({
+      data: { email, password: hash, role: 'USER' }
+    });
+
+    // 👇 Публикуем событие
+    await publishLog({
+      type: 'user_registered',
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        timestamp: new Date().toISOString()
+      }
+    });
 
     res.status(201).json({ message: 'Регистрация прошла успешно' });
   } catch (err) {
@@ -47,7 +60,17 @@ app.post('/api/login', async (req, res) => {
       { expiresIn: '7d' }
     );
 
-    console.log('[LOGIN SUCCESS] token:', token); // 👈 лог
+    console.log('[LOGIN SUCCESS] token:', token);
+
+    // 👇 Логгируем вход
+    await publishLog({
+      type: 'user_logged_in',
+      user: {
+        id: user.id,
+        email: user.email,
+        timestamp: new Date().toISOString()
+      }
+    });
 
     res.json({ token, email: user.email, role: user.role });
   } catch (err) {
@@ -96,6 +119,16 @@ app.put('/api/profile', async (req, res) => {
     const updated = await prisma.user.update({
       where: { id: payload.id },
       data: { firstName, lastName, middleName, phone, address }
+    });
+
+    // 👇 Логгируем обновление профиля
+    await publishLog({
+      type: 'profile_updated',
+      user: {
+        id: updated.id,
+        email: updated.email,
+        timestamp: new Date().toISOString()
+      }
     });
 
     res.status(200).json(updated);
@@ -162,12 +195,25 @@ app.post('/api/orders', async (req, res) => {
       }
     });
 
+    // 👇 Логгируем заказ
+    await publishLog({
+      type: 'order_created',
+      order: {
+        id: order.id,
+        total: order.total,
+        userId: payload.id,
+        itemIds: items,
+        timestamp: new Date().toISOString()
+      }
+    });
+
     res.status(201).json(order);
   } catch (err) {
     console.error('[ORDER CREATE ERROR]', err);
     res.status(500).json({ error: 'Ошибка при создании заказа' });
   }
 });
+
 
 // Получение заказов
 app.get('/api/orders', async (req, res) => {

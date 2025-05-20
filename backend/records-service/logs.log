@@ -1,1 +1,6 @@
 {"from":"log-queue","level":"info","message":{"record":{"description":"Experimental rock","ensembleId":null,"id":108,"price":25.99,"sales":0,"title":"In Rainbows","year":2007},"type":"record_created"},"timestamp":"2025-05-19T16:13:44.800Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_registered","user":{"email":"rabbit@test.com","id":4,"timestamp":"2025-05-20T14:15:37.204Z"}},"timestamp":"2025-05-20T14:15:37.209Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"rabbit@test.com","id":4,"timestamp":"2025-05-20T14:34:51.643Z"}},"timestamp":"2025-05-20T14:34:51.655Z"}
+{"from":"log-queue","level":"info","message":{"order":{"id":1,"itemIds":[108],"timestamp":"2025-05-20T14:37:51.641Z","total":25.99,"userId":4},"type":"order_created"},"timestamp":"2025-05-20T14:37:51.646Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"rabbit@test.com","id":4,"timestamp":"2025-05-20T14:47:00.896Z"}},"timestamp":"2025-05-20T14:47:00.901Z"}
+{"from":"log-queue","level":"info","message":{"type":"profile_updated","user":{"email":"rabbit@test.com","id":4,"timestamp":"2025-05-20T14:47:43.290Z"}},"timestamp":"2025-05-20T14:47:43.296Z"}
