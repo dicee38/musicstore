@@ -1,23 +1,38 @@
 const express = require('express');
 const cors = require('cors');
 const { PrismaClient } = require('@prisma/client');
+const Redis = require('ioredis');
 
 const app = express();
 const prisma = new PrismaClient();
+const redis = new Redis({ host: 'redis', port: 6379 });
+
 const PORT = 4005;
 
 app.use(cors());
 app.use(express.json());
+
+redis.on('connect', () => {
+  console.log('[✓] Redis connected in top-service');
+});
 
 /**
  * Получить топ 10 записей по продажам
  */
 app.get('/api/top', async (req, res) => {
   try {
+    const cached = await redis.get('top:records');
+    if (cached) {
+      console.log('[CACHE] Returned from Redis');
+      return res.json(JSON.parse(cached));
+    }
+
     const topRecords = await prisma.record.findMany({
       orderBy: { sales: 'desc' },
       take: 10,
     });
+
+    await redis.set('top:records', JSON.stringify(topRecords), 'EX', 60); // TTL = 60 сек
     res.json(topRecords);
   } catch (err) {
     res.status(500).json({ error: 'Ошибка при получении топа' });
@@ -60,6 +75,7 @@ app.post('/api/top/categories', async (req, res) => {
     const newTop = await prisma.top.create({
       data: { category, items },
     });
+    await redis.del('top:records'); // сброс кэша
     res.status(201).json(newTop);
   } catch (err) {
     res.status(500).json({ error: 'Ошибка при создании категории' });
@@ -76,6 +92,7 @@ app.put('/api/top/categories/:id', async (req, res) => {
       where: { id: parseInt(req.params.id) },
       data: { category, items },
     });
+    await redis.del('top:records'); // сброс кэша
     res.json(updated);
   } catch (err) {
     res.status(500).json({ error: 'Ошибка при обновлении категории' });
@@ -90,6 +107,7 @@ app.delete('/api/top/categories/:id', async (req, res) => {
     await prisma.top.delete({
       where: { id: parseInt(req.params.id) },
     });
+    await redis.del('top:records'); // сброс кэша
     res.sendStatus(204);
   } catch (err) {
     res.status(500).json({ error: 'Ошибка при удалении категории' });

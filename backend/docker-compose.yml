@@ -71,7 +71,8 @@ services:
       - DATABASE_URL=postgresql://unical:unical@postgres:5432/musicstore?schema=public
     depends_on:
       - postgres
-    command: sh -c "npx prisma generate && npx prisma db push && node index.js"
+    command: sh -c "npx prisma generate && node index.js"
+
 
   admin-service:
     build: ./admin-service
@@ -103,6 +104,11 @@ services:
     restart: always
     environment:
       - DATABASE_URL="postgresql://unical:610999@localhost:5432/musicstore?schema=public"
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
 
 volumes:
   pgdata:

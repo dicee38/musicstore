@@ -9,4 +9,6 @@ COPY . .
 
 EXPOSE 4005
 
-CMD ["sh", "-c", "npx prisma generate && node index.js"]
+CMD ["node", "index.js"]
+
+
