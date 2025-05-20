@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "@prisma/client": "^6.8.2",
+    "amqplib": "^0.10.8",
     "cors": "^2.8.5",
     "express": "^5.1.0"
   },
