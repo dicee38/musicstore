@@ -42,9 +42,7 @@ server/
 ├── ensembles-service/
 ├── top-service/
 
-bash
-Копировать
-Редактировать
+
 
 ## 📦 Установка и запуск
 
@@ -52,6 +50,7 @@ bash
 git clone https://github.com/your-username/music-store.git
 cd music-store
 docker compose up --build
+```
 Проект доступен по адресу: http://localhost:3000
 
 🔒 Авторизация
