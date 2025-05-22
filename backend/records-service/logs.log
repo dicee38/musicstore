@@ -5,3 +5,15 @@
 {"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"rabbit@test.com","id":4,"timestamp":"2025-05-20T14:47:00.896Z"}},"timestamp":"2025-05-20T14:47:00.901Z"}
 {"from":"log-queue","level":"info","message":{"type":"profile_updated","user":{"email":"rabbit@test.com","id":4,"timestamp":"2025-05-20T14:47:43.290Z"}},"timestamp":"2025-05-20T14:47:43.296Z"}
 {"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin123","id":9,"timestamp":"2025-05-20T21:43:37.301Z"}},"timestamp":"2025-05-20T21:43:37.340Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"123","id":4,"timestamp":"2025-05-22T17:05:36.232Z"}},"timestamp":"2025-05-22T17:05:36.253Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin123","id":9,"timestamp":"2025-05-22T17:16:31.723Z"}},"timestamp":"2025-05-22T17:16:31.742Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_registered","user":{"email":"test@example.com","id":10,"timestamp":"2025-05-22T17:43:51.944Z"}},"timestamp":"2025-05-22T17:43:52.089Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"test@example.com","id":10,"timestamp":"2025-05-22T17:43:52.128Z"}},"timestamp":"2025-05-22T17:43:52.146Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"test@example.com","id":10,"timestamp":"2025-05-22T17:46:18.777Z"}},"timestamp":"2025-05-22T17:46:18.785Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"test@example.com","id":10,"timestamp":"2025-05-22T17:50:37.927Z"}},"timestamp":"2025-05-22T17:50:37.936Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"test@example.com","id":10,"timestamp":"2025-05-22T17:51:26.897Z"}},"timestamp":"2025-05-22T17:51:26.901Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"test@example.com","id":10,"timestamp":"2025-05-22T17:52:31.776Z"}},"timestamp":"2025-05-22T17:52:31.779Z"}
+{"from":"log-queue","level":"info","message":{"data":{"description":"Один из величайших альбомов всех времён","ensembleId":2,"id":3,"price":3490,"sales":0,"title":"Dark Side of the Moon","year":1973},"event":"CREATE_RECORD"},"timestamp":"2025-05-22T17:52:31.996Z"}
+{"from":"log-queue","level":"info","message":{"record":{"description":"Один из величайших альбомов всех времён","ensembleId":2,"id":3,"price":3490,"sales":0,"title":"Dark Side of the Moon","year":1973},"type":"record_created"},"timestamp":"2025-05-22T17:52:32.211Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin123","id":9,"timestamp":"2025-05-22T18:43:30.749Z"}},"timestamp":"2025-05-22T18:43:30.802Z"}
+{"from":"log-queue","level":"info","message":{"order":{"id":3,"itemIds":[1],"timestamp":"2025-05-22T18:46:03.465Z","total":119.96,"userId":9},"type":"order_created"},"timestamp":"2025-05-22T18:46:03.485Z"}
