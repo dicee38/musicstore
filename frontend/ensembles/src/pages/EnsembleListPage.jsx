@@ -2,28 +2,37 @@ import React, { useEffect, useState } from 'react';
 import { getAllEnsembles } from '../api/ensemblesApi';
 import { Link } from 'react-router-dom';
 import {
-  Box, Typography, Container, Grid, CircularProgress, TextField, Pagination, Paper
+  Box,
+  Typography,
+  Container,
+  CircularProgress,
+  Alert,
+  TextField,
+  Stack,
+  Paper,
+  Button,
+  Pagination,
 } from '@mui/material';
-import { keyframes } from '@emotion/react';
 
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
-
-const ITEMS_PER_PAGE = 6;
+const PAGE_SIZE = 6;
 
 export default function EnsembleListPage() {
   const [ensembles, setEnsembles] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [search, setSearch] = useState('');
+  const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    getAllEnsembles().then((data) => {
-      setEnsembles(data);
-      setFiltered(data);
-    });
+    getAllEnsembles()
+      .then((data) => {
+        setEnsembles(data);
+        setFiltered(data);
+      })
+      .catch((err) => {
+        console.error('Error fetching ensembles:', err);
+        setError('Не удалось загрузить ансамбли');
+      });
   }, []);
 
   useEffect(() => {
@@ -34,6 +43,17 @@ export default function EnsembleListPage() {
     setPage(1);
   }, [search, ensembles]);
 
+  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const pageCount = Math.ceil(filtered.length / PAGE_SIZE);
+
+  if (error) {
+    return (
+      <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Alert severity="error">{error}</Alert>
+      </Box>
+    );
+  }
+
   if (!ensembles.length) {
     return (
       <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -42,53 +62,54 @@ export default function EnsembleListPage() {
     );
   }
 
-  const paginated = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
-
   return (
-    <Box sx={{ minHeight: '100vh', background: 'linear-gradient(to bottom, #f0f2f5, #ffffff)', py: 8, animation: `${fadeIn} 0.6s ease forwards`, opacity: 0 }}>
+    <Box sx={{ minHeight: '100vh', background: 'linear-gradient(to bottom, #f7f9fb, #ffffff)', py: 8 }}>
       <Container>
         <Typography variant="h4" fontWeight="bold" gutterBottom textAlign="center">
           Ансамбли
         </Typography>
 
-        <TextField
-          fullWidth
-          label="Поиск ансамбля"
-          variant="outlined"
-          sx={{ mb: 4 }}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-
-        <Grid container spacing={4}>
-          {paginated.map((ensemble) => (
-            <Grid item key={ensemble.id} xs={12} sm={6} md={4}>
-              <Link to={`/ensembles/${ensemble.id}`} style={{ textDecoration: 'none' }}>
-                <Paper elevation={3} sx={{ p: 2, height: '100%' }}>
-                  {ensemble.image && (
-                    <Box
-                      component="img"
-                      src={ensemble.image}
-                      alt={ensemble.name}
-                      sx={{ width: '100%', height: 200, objectFit: 'cover', borderRadius: 2 }}
-                    />
-                  )}
-                  <Typography variant="body2" fontWeight="bold" sx={{ mt: 2 }}>
-                    {ensemble.name}
-                  </Typography>
-                </Paper>
-              </Link>
-            </Grid>
-          ))}
-        </Grid>
-
-        {filtered.length > ITEMS_PER_PAGE && (
-          <Pagination
-            count={Math.ceil(filtered.length / ITEMS_PER_PAGE)}
-            page={page}
-            onChange={(_, value) => setPage(value)}
-            sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 4 }}>
+          <TextField
+            label="Поиск"
+            variant="outlined"
+            fullWidth
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
+        </Stack>
+
+        <Stack spacing={2}>
+          {paginated.map((ensemble) => (
+            <Paper key={ensemble.id} sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }} elevation={3}>
+              <Box
+                component={Link}
+                to={`/ensembles/${ensemble.id}`}
+                sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', width: '100%' }}
+              >
+                {ensemble.image && (
+                  <Box
+                    component="img"
+                    src={ensemble.image}
+                    alt={ensemble.name}
+                    sx={{ width: 140, height: 140, objectFit: 'cover', borderRadius: 2 }}
+                  />
+                )}
+                <Box sx={{ ml: 2, flex: 1 }}>
+                  <Typography variant="h6">{ensemble.name}</Typography>
+                </Box>
+              </Box>
+              <Button variant="outlined" component={Link} to={`/ensembles/${ensemble.id}`}>
+                Подробнее
+              </Button>
+            </Paper>
+          ))}
+        </Stack>
+
+        {pageCount > 1 && (
+          <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
+            <Pagination count={pageCount} page={page} onChange={(e, val) => setPage(val)} color="primary" />
+          </Box>
         )}
       </Container>
     </Box>
