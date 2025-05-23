@@ -21,17 +21,35 @@ const fadeIn = keyframes`
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const validate = () => {
+    const newErrors = {};
+    if (!email) newErrors.email = 'Введите email';
+    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = 'Неверный формат email';
+
+    if (!password) newErrors.password = 'Введите пароль';
+    else if (password.length < 6) newErrors.password = 'Минимум 6 символов';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await registerApi(email, password);
+    if (!validate()) return;
 
-    const userData = await loginApi(email, password); // авто-вход
-    if (userData && userData.role) {
-      dispatch(login({ role: userData.role }));
-      navigate(userData.role === 'admin' ? '/admin' : '/');
+    try {
+      await registerApi(email, password);
+      const userData = await loginApi(email, password);
+      if (userData && userData.role) {
+        dispatch(login({ role: userData.role }));
+        navigate(userData.role === 'admin' ? '/admin' : '/');
+      }
+    } catch (err) {
+      setErrors({ email: 'Ошибка регистрации или входа' });
     }
   };
 
@@ -68,7 +86,8 @@ export default function RegisterPage() {
             fullWidth
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
+            error={!!errors.email}
+            helperText={errors.email}
           />
           <TextField
             label="Пароль"
@@ -77,7 +96,8 @@ export default function RegisterPage() {
             fullWidth
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
+            error={!!errors.password}
+            helperText={errors.password}
           />
           <Button type="submit" variant="contained" fullWidth>
             Зарегистрироваться
