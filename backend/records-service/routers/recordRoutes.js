@@ -1,11 +1,20 @@
-const express = require('express')
-const router = express.Router()
-const recordController = require('../controllers/recordController')
+const express = require('express');
+const router = express.Router();
+const recordController = require('../controllers/recordController');
 
-router.get('/', recordController.getAllRecords)
-router.get('/:id', recordController.getRecordById)
-router.post('/', recordController.createRecord)
-router.put('/:id', recordController.updateRecord)
-router.delete('/:id', recordController.deleteRecord)
+// GET all records
+router.get('/', recordController.getAllRecords);
 
-module.exports = router
+// GET a specific record by ID
+router.get('/:id', recordController.getRecordById);
+
+// POST a new record
+router.post('/', recordController.createRecord);
+
+// PUT update existing record
+router.put('/:id', recordController.updateRecord);
+
+// DELETE a record by ID
+router.delete('/:id', recordController.deleteRecord);
+
+module.exports = router;

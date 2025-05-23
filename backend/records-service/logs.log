@@ -4,3 +4,43 @@
 {"from":"log-queue","level":"info","message":{"order":{"id":1,"itemIds":[108],"timestamp":"2025-05-20T14:37:51.641Z","total":25.99,"userId":4},"type":"order_created"},"timestamp":"2025-05-20T14:37:51.646Z"}
 {"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"rabbit@test.com","id":4,"timestamp":"2025-05-20T14:47:00.896Z"}},"timestamp":"2025-05-20T14:47:00.901Z"}
 {"from":"log-queue","level":"info","message":{"type":"profile_updated","user":{"email":"rabbit@test.com","id":4,"timestamp":"2025-05-20T14:47:43.290Z"}},"timestamp":"2025-05-20T14:47:43.296Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_registered","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T08:53:48.736Z"}},"timestamp":"2025-05-21T08:53:48.743Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T08:53:54.573Z"}},"timestamp":"2025-05-21T08:53:54.575Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T08:58:50.044Z"}},"timestamp":"2025-05-21T08:58:50.049Z"}
+{"from":"log-queue","level":"info","message":{"record":{"description":null,"ensembleId":40,"id":146,"price":19.99,"sales":0,"title":"Back to Beat","year":2024},"type":"record_created"},"timestamp":"2025-05-21T09:00:38.855Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T09:20:13.944Z"}},"timestamp":"2025-05-21T09:20:13.951Z"}
+{"from":"log-queue","level":"info","message":{"record":{"description":null,"ensembleId":42,"id":147,"price":19.99,"sales":0,"title":"Back to Beat","year":2024},"type":"record_created"},"timestamp":"2025-05-21T09:20:35.287Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T09:36:06.392Z"}},"timestamp":"2025-05-21T09:36:06.399Z"}
+{"from":"log-queue","level":"info","message":{"record":{"description":null,"ensembleId":43,"id":148,"price":19.99,"sales":0,"title":"Back to Beat","year":2024},"type":"record_created"},"timestamp":"2025-05-21T09:36:06.744Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T09:37:07.407Z"}},"timestamp":"2025-05-21T09:37:07.421Z"}
+{"from":"log-queue","level":"info","message":{"record":{"description":null,"ensembleId":44,"id":149,"price":19.99,"sales":0,"title":"Back to Beat","year":2024},"type":"record_created"},"timestamp":"2025-05-21T09:37:07.530Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T09:37:20.050Z"}},"timestamp":"2025-05-21T09:37:20.051Z"}
+{"from":"log-queue","level":"info","message":{"record":{"description":null,"ensembleId":45,"id":150,"price":19.99,"sales":0,"title":"Back to Beat","year":2024},"type":"record_created"},"timestamp":"2025-05-21T09:37:30.514Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T09:55:33.179Z"}},"timestamp":"2025-05-21T09:55:33.211Z"}
+{"from":"log-queue","level":"info","message":{"record":{"description":null,"ensembleId":47,"id":152,"price":19.99,"sales":0,"title":"Back to Beat","year":2024},"type":"record_created"},"timestamp":"2025-05-21T09:56:50.149Z"}
+{"from":"log-queue","level":"info","message":{"record":{"description":null,"ensembleId":47,"id":153,"price":19.99,"sales":0,"title":"Back to Beat","year":2024},"type":"record_created"},"timestamp":"2025-05-21T09:59:34.125Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T12:09:01.924Z"}},"timestamp":"2025-05-21T12:09:01.934Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T12:09:42.562Z"}},"timestamp":"2025-05-21T12:09:42.566Z"}
+{"from":"log-queue","level":"info","message":{"record":{"description":null,"ensembleId":49,"id":155,"price":19.99,"sales":0,"title":"Back to Beat","year":2024},"type":"record_created"},"timestamp":"2025-05-21T12:09:42.708Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T13:14:51.560Z"}},"timestamp":"2025-05-21T13:14:51.568Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T13:15:18.963Z"}},"timestamp":"2025-05-21T13:15:18.966Z"}
+{"from":"log-queue","level":"info","message":{"record":{"description":null,"ensembleId":51,"id":156,"price":19.99,"sales":0,"title":"Back to Beat","year":2024},"type":"record_created"},"timestamp":"2025-05-21T13:15:19.194Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T13:37:31.267Z"}},"timestamp":"2025-05-21T13:37:31.283Z"}
+{"from":"log-queue","level":"info","message":{"record":{"description":null,"ensembleId":52,"id":157,"price":19.99,"sales":0,"title":"Back to Beat","year":2024},"type":"record_created"},"timestamp":"2025-05-21T13:37:31.467Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T13:37:54.188Z"}},"timestamp":"2025-05-21T13:37:54.190Z"}
+{"from":"log-queue","level":"info","message":{"record":{"description":null,"ensembleId":54,"id":158,"price":19.99,"sales":0,"title":"Back to Beat","year":2024},"type":"record_created"},"timestamp":"2025-05-21T13:38:41.745Z"}
+{"from":"log-queue","level":"info","message":{"record":{"description":null,"ensembleId":56,"id":160,"price":19.99,"sales":0,"title":"Back to Beat","year":2024},"type":"record_created"},"timestamp":"2025-05-21T13:53:04.673Z"}
+{"from":"log-queue","level":"info","message":{"id":160,"type":"record_deleted"},"timestamp":"2025-05-21T13:53:08.913Z"}
+{"from":"log-queue","level":"info","message":{"id":69,"type":"record_deleted"},"timestamp":"2025-05-21T13:55:54.522Z"}
+{"from":"log-queue","level":"info","message":{"id":35,"type":"record_deleted"},"timestamp":"2025-05-21T13:57:53.510Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T14:34:39.510Z"}},"timestamp":"2025-05-21T14:34:39.521Z"}
+{"from":"log-queue","level":"info","message":{"record":{"description":null,"ensembleId":58,"id":161,"price":19.99,"sales":0,"title":"Back to Beat","year":2024},"type":"record_created"},"timestamp":"2025-05-21T14:34:39.835Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T14:36:47.682Z"}},"timestamp":"2025-05-21T14:36:47.686Z"}
+{"from":"log-queue","level":"info","message":{"record":{"description":null,"ensembleId":59,"id":162,"price":19.99,"sales":0,"title":"Back to Beat","year":2024},"type":"record_created"},"timestamp":"2025-05-21T14:36:47.824Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T14:37:27.920Z"}},"timestamp":"2025-05-21T14:37:27.923Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T14:38:05.734Z"}},"timestamp":"2025-05-21T14:38:05.736Z"}
+{"from":"log-queue","level":"info","message":{"record":{"description":null,"ensembleId":60,"id":163,"price":19.99,"sales":0,"title":"Back to Beat","year":2024},"type":"record_created"},"timestamp":"2025-05-21T14:38:05.867Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T14:38:43.033Z"}},"timestamp":"2025-05-21T14:38:43.038Z"}
+{"from":"log-queue","level":"info","message":{"record":{"description":null,"ensembleId":61,"id":164,"price":19.99,"sales":0,"title":"Back to Beat","year":2024},"type":"record_created"},"timestamp":"2025-05-21T14:38:43.187Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T14:48:14.727Z"}},"timestamp":"2025-05-21T14:48:14.740Z"}
+{"from":"log-queue","level":"info","message":{"type":"user_logged_in","user":{"email":"admin@musicstore.com","id":5,"timestamp":"2025-05-21T14:56:16.964Z"}},"timestamp":"2025-05-21T14:56:16.972Z"}

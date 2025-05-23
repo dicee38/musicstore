@@ -54,8 +54,11 @@ exports.updateRecord = async (req, res) => {
 
 exports.deleteRecord = async (req, res) => {
   try {
-    await recordService.remove(Number(req.params.id));
-    res.json({ message: 'Deleted successfully' });
+    const deleted = await recordService.remove(Number(req.params.id));
+    if (!deleted) return res.status(404).json({ error: 'Record not found' });
+
+    await publishLogMessage({ type: 'record_deleted', id: Number(req.params.id) });
+    res.sendStatus(204); // ← правильно по REST
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

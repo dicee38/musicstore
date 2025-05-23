@@ -22,6 +22,9 @@ exports.update = async (id, data) => {
 };
 
 exports.remove = async (id) => {
+  const existing = await prisma.record.findUnique({ where: { id } });
+  if (!existing) return null;
+
   const deleted = await prisma.record.delete({ where: { id } });
   await publishLog({ event: 'DELETE_RECORD', data: deleted });
 

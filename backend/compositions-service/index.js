@@ -55,23 +55,32 @@ app.get('/api/compositions/:id', async (req, res) => {
     await redis.set(key, JSON.stringify(composition), 'EX', 60);
     res.json(composition);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Ошибка при получении композиции' });
   }
 });
 
 /**
- * Создать композицию
+ * Создать композицию с привязкой к записи
  */
 app.post('/api/compositions', async (req, res) => {
-  const { title, composer, description } = req.body;
+  const { title, composer, description, recordId } = req.body;
   try {
     const newComposition = await prisma.composition.create({
-      data: { title, composer, description },
+      data: {
+        title,
+        composer,
+        description,
+        records: {
+          connect: [{ id: parseInt(recordId) }]
+        }
+      }
     });
 
     await redis.del('compositions:all'); // сбрасываем список
     res.status(201).json(newComposition);
   } catch (err) {
+    console.error('[CREATE COMPOSITION ERROR]', err);
     res.status(500).json({ error: 'Ошибка при создании композиции' });
   }
 });
@@ -92,6 +101,7 @@ app.put('/api/compositions/:id', async (req, res) => {
     await redis.del('compositions:all');
     res.json(updated);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Ошибка при обновлении композиции' });
   }
 });
@@ -108,6 +118,7 @@ app.delete('/api/compositions/:id', async (req, res) => {
     await redis.del('compositions:all');
     res.sendStatus(204);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Ошибка при удалении композиции' });
   }
 });
